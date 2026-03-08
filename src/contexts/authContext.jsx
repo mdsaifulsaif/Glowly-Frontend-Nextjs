@@ -60,25 +60,51 @@ export const AuthProvider = ({ children }) => {
 //   };
 const logoutUser = async () => {
   try {
+  
     const res = await axios.get(`${BASE_URL}/auth/logout`, {
-      withCredentials: true,
+      withCredentials: true, 
     });
 
     if (res.data.success) {
-      // ১. কুকি থেকে টোকেনটি ডিলিট করুন (মিডলওয়্যারের জন্য এটি জরুরি)
-      Cookies.remove("token"); 
-      
       toast.success(res.data.message || "Logged out successfully");
       
-      // ২. ইউজারকে হোমপেজে পাঠিয়ে দিন এবং স্টেট ক্লিন করুন
+     
       setUser(null);
-      window.location.href = "/"; // এটি ব্যবহার করলে ইউজার আর প্রটেক্টেড রাউটে থাকতে পারবে না
+      
+  
+      window.location.replace("/"); 
     }
   } catch (err) {
     console.error("Logout failed", err);
     toast.error("Logout failed. Please try again.");
+    
+   
+    setUser(null);
+    window.location.href = "/";
   }
 };
+
+// const logoutUser = async () => {
+//   try {
+//     const res = await axios.get(`${BASE_URL}/auth/logout`, {
+//       withCredentials: true,
+//     });
+
+//     if (res.data.success) {
+     
+//       Cookies.remove("token"); 
+      
+//       toast.success(res.data.message || "Logged out successfully");
+      
+    
+//       setUser(null);
+//       window.location.href = "/"; 
+//     }
+//   } catch (err) {
+//     console.error("Logout failed", err);
+//     toast.error("Logout failed. Please try again.");
+//   }
+// };
   return (
     <AuthContext.Provider
       value={{
