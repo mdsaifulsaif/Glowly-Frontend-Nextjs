@@ -24,11 +24,11 @@ export default function RootLayout({ children }) {
         suppressHydrationWarning={true}
       >
         <AuthProvider>
-          <Navbar />
+          {/* <Navbar /> */}
 
           <main>{children}</main>
 
-          <Footer />
+          {/* <Footer /> */}
 
           <Toaster
             position="top-center"
