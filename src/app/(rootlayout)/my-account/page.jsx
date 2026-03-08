@@ -11,6 +11,7 @@ import { BASE_URL } from "@/helper/BASE_URL";
 
 import LoadingPage from "@/components/shared/LoadingPage";
 import { useRouter } from "next/navigation";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 const MyAccountPage = () => {
   const navigate = useRouter();
@@ -37,7 +38,6 @@ const MyAccountPage = () => {
 
   const [selectedFile, setSelectedFile] = useState(null);
 
-  // ১. প্রোফাইল লোড করা
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -142,139 +142,64 @@ const MyAccountPage = () => {
   };
 
   return (
-    <div className="bg-white min-h-screen py-16 font-raleway">
-      <div className="max-w-6xl mx-auto px-6">
-        <h1 className="text-4xl font-medium text-[#1A1A1A] mb-10 italic">
-          My Account
-        </h1>
+    <ProtectedRoute>
+      <div className="bg-white min-h-screen py-16 font-raleway">
+        <div className="max-w-6xl mx-auto px-6">
+          <h1 className="text-4xl font-medium text-[#1A1A1A] mb-10 italic">
+            My Account
+          </h1>
 
-        {/* Tab Buttons */}
-        <div className="flex gap-4 mb-12">
-          <button
-            onClick={() => setActiveTab("profile")}
-            className={`flex items-center gap-2 px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest transition-all ${activeTab === "profile" ? "bg-black text-white" : "bg-white text-black border border-gray-200"}`}
-          >
-            <IoPersonOutline /> Profile
-          </button>
-          <button
-            onClick={() => setActiveTab("orders")}
-            className={`flex items-center gap-2 px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest transition-all ${activeTab === "orders" ? "bg-black text-white" : "bg-white text-black border border-gray-200"}`}
-          >
-            <IoBagHandleOutline /> Order History
-          </button>
-        </div>
+          {/* Tab Buttons */}
+          <div className="flex gap-4 mb-12">
+            <button
+              onClick={() => setActiveTab("profile")}
+              className={`flex items-center gap-2 px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest transition-all ${activeTab === "profile" ? "bg-black text-white" : "bg-white text-black border border-gray-200"}`}
+            >
+              <IoPersonOutline /> Profile
+            </button>
+            <button
+              onClick={() => setActiveTab("orders")}
+              className={`flex items-center gap-2 px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest transition-all ${activeTab === "orders" ? "bg-black text-white" : "bg-white text-black border border-gray-200"}`}
+            >
+              <IoBagHandleOutline /> Order History
+            </button>
+          </div>
 
-        {/* PROFILE TAB CONTENT */}
-        {activeTab === "profile" && (
-          <div className="space-y-16">
-            <section>
-              <h2 className="text-xl font-bold text-[#1A1A1A] mb-8">
-                User Information
-              </h2>
-              <div className="relative w-32 h-32 mb-10">
-                <img
-                  src={
-                    selectedFile
-                      ? URL.createObjectURL(selectedFile)
-                      : userData.profileImage ||
-                        "https://via.placeholder.com/150"
-                  }
-                  alt="User"
-                  className="w-full h-full object-cover rounded-full border border-gray-100"
-                />
-                <label className="absolute bottom-1 right-1 bg-black text-white p-2 rounded-full cursor-pointer hover:scale-110 transition-transform">
-                  <IoCameraOutline size={16} />
-                  <input
-                    type="file"
-                    className="hidden"
-                    onChange={(e) => setSelectedFile(e.target.files[0])}
+          {/* PROFILE TAB CONTENT */}
+          {activeTab === "profile" && (
+            <div className="space-y-16">
+              <section>
+                <h2 className="text-xl font-bold text-[#1A1A1A] mb-8">
+                  User Information
+                </h2>
+                <div className="relative w-32 h-32 mb-10">
+                  <img
+                    src={
+                      selectedFile
+                        ? URL.createObjectURL(selectedFile)
+                        : userData.profileImage ||
+                          "https://via.placeholder.com/150"
+                    }
+                    alt="User"
+                    className="w-full h-full object-cover rounded-full border border-gray-100"
                   />
-                </label>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl">
-                <div className="flex flex-col gap-2">
-                  <label className="text-[11px] font-bold uppercase">
-                    First name
+                  <label className="absolute bottom-1 right-1 bg-black text-white p-2 rounded-full cursor-pointer hover:scale-110 transition-transform">
+                    <IoCameraOutline size={16} />
+                    <input
+                      type="file"
+                      className="hidden"
+                      onChange={(e) => setSelectedFile(e.target.files[0])}
+                    />
                   </label>
-                  <input
-                    name="firstName"
-                    value={userData.firstName}
-                    onChange={handleChange}
-                    type="text"
-                    className="border border-[#E5E5E5] p-3 rounded-md outline-none"
-                  />
                 </div>
-                <div className="flex flex-col gap-2">
-                  <label className="text-[11px] font-bold uppercase">
-                    Last name
-                  </label>
-                  <input
-                    name="lastName"
-                    value={userData.lastName}
-                    onChange={handleChange}
-                    type="text"
-                    className="border border-[#E5E5E5] p-3 rounded-md outline-none"
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label className="text-[11px] font-bold uppercase">
-                    Email
-                  </label>
-                  <input
-                    name="email"
-                    value={userData.email}
-                    onChange={handleChange}
-                    type="email"
-                    className="border border-[#E5E5E5] p-3 rounded-md outline-none"
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label className="text-[11px] font-bold uppercase">
-                    Phone
-                  </label>
-                  <input
-                    name="phone"
-                    value={userData.phone}
-                    onChange={handleChange}
-                    type="text"
-                    className="border border-[#E5E5E5] p-3 rounded-md outline-none"
-                  />
-                </div>
-              </div>
-              <button
-                onClick={handleUserInfoUpdate}
-                disabled={loading}
-                className="mt-8 bg-black text-white px-8 py-3 rounded-md font-bold text-[10px] uppercase tracking-widest"
-              >
-                {loading ? "Updating..." : "Update Profile"}
-              </button>
-            </section>
-
-            <section>
-              <h2 className="text-xl font-bold text-[#1A1A1A] mb-8">
-                Shipping Address
-              </h2>
-              <div className="space-y-6 max-w-4xl">
-                <div className="flex flex-col gap-2">
-                  <label className="text-[11px] font-bold uppercase">
-                    Address Line
-                  </label>
-                  <input
-                    name="addressLine"
-                    value={userData.addressLine}
-                    onChange={handleChange}
-                    type="text"
-                    className="w-full border border-[#E5E5E5] p-3 rounded-md outline-none"
-                  />
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl">
                   <div className="flex flex-col gap-2">
                     <label className="text-[11px] font-bold uppercase">
-                      City
+                      First name
                     </label>
                     <input
-                      name="city"
-                      value={userData.city}
+                      name="firstName"
+                      value={userData.firstName}
                       onChange={handleChange}
                       type="text"
                       className="border border-[#E5E5E5] p-3 rounded-md outline-none"
@@ -282,11 +207,11 @@ const MyAccountPage = () => {
                   </div>
                   <div className="flex flex-col gap-2">
                     <label className="text-[11px] font-bold uppercase">
-                      State
+                      Last name
                     </label>
                     <input
-                      name="state"
-                      value={userData.state}
+                      name="lastName"
+                      value={userData.lastName}
                       onChange={handleChange}
                       type="text"
                       className="border border-[#E5E5E5] p-3 rounded-md outline-none"
@@ -294,11 +219,23 @@ const MyAccountPage = () => {
                   </div>
                   <div className="flex flex-col gap-2">
                     <label className="text-[11px] font-bold uppercase">
-                      Postal Code
+                      Email
                     </label>
                     <input
-                      name="postalCode"
-                      value={userData.postalCode}
+                      name="email"
+                      value={userData.email}
+                      onChange={handleChange}
+                      type="email"
+                      className="border border-[#E5E5E5] p-3 rounded-md outline-none"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="text-[11px] font-bold uppercase">
+                      Phone
+                    </label>
+                    <input
+                      name="phone"
+                      value={userData.phone}
                       onChange={handleChange}
                       type="text"
                       className="border border-[#E5E5E5] p-3 rounded-md outline-none"
@@ -306,141 +243,211 @@ const MyAccountPage = () => {
                   </div>
                 </div>
                 <button
-                  onClick={handleAddressUpdate}
-                  className="bg-black text-white px-8 py-3 rounded-md font-bold text-[10px] uppercase tracking-widest"
+                  onClick={handleUserInfoUpdate}
+                  disabled={loading}
+                  className="mt-8 bg-black text-white px-8 py-3 rounded-md font-bold text-[10px] uppercase tracking-widest"
                 >
-                  Update Address
+                  {loading ? "Updating..." : "Update Profile"}
                 </button>
-              </div>
-            </section>
+              </section>
 
-            <section>
-              <h2 className="text-xl font-bold text-[#1A1A1A] mb-8">
-                Change Password
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl">
-                <div className="flex flex-col gap-2">
-                  <label className="text-[11px] font-bold uppercase">
-                    Current Password
-                  </label>
-                  <input
-                    name="currentPassword"
-                    value={userData.currentPassword}
-                    onChange={handleChange}
-                    type="password"
-                    placeholder="••••••••"
-                    className="border border-[#E5E5E5] p-3 rounded-md outline-none"
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label className="text-[11px] font-bold uppercase">
-                    New Password
-                  </label>
-                  <input
-                    name="newPassword"
-                    value={userData.newPassword}
-                    onChange={handleChange}
-                    type="password"
-                    placeholder="••••••••"
-                    className="border border-[#E5E5E5] p-3 rounded-md outline-none"
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <label className="text-[11px] font-bold uppercase">
-                    Confirm Password
-                  </label>
-                  <input
-                    name="confirmPassword"
-                    value={userData.confirmPassword}
-                    onChange={handleChange}
-                    type="password"
-                    placeholder="••••••••"
-                    className="border border-[#E5E5E5] p-3 rounded-md outline-none"
-                  />
-                </div>
-              </div>
-              <button
-                onClick={handlePasswordUpdate}
-                className="mt-8 bg-black text-white px-8 py-3 rounded-md font-bold text-[10px] uppercase tracking-widest"
-              >
-                Update Password
-              </button>
-            </section>
-          </div>
-        )}
-
-        {/* ORDER HISTORY TAB CONTENT (Design অনুযায়ী) */}
-        {activeTab === "orders" && (
-          <div className="space-y-6">
-            {orderLoading ? (
-              <LoadingPage />
-            ) : orders.length > 0 ? (
-              orders.map((order) => (
-                <div
-                  key={order._id}
-                  className="border border-gray-100 rounded-lg p-8 bg-white shadow-sm"
-                >
-                  <div className="flex justify-between items-start mb-6">
-                    <div>
-                      <h3 className="text-lg font-bold text-[#1A1A1A]">
-                        Order ORD-{order._id.slice(-5).toUpperCase()}
-                      </h3>
-                      <p className="text-sm text-gray-400 mt-1">
-                        {new Date(order.createdAt).toLocaleDateString("en-US", {
-                          month: "long",
-                          day: "numeric",
-                          year: "numeric",
-                        })}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <span
-                        className={`text-[11px] font-bold uppercase px-3 py-1 rounded-full ${order.status === "Delivered" ? "bg-green-50 text-green-600" : "bg-orange-50 text-orange-600"}`}
-                      >
-                        {order.status}
-                      </span>
-                      <p className="text-lg font-bold text-[#1A1A1A] mt-2">
-                        {order.totalAmount}
-                      </p>
-                    </div>
+              <section>
+                <h2 className="text-xl font-bold text-[#1A1A1A] mb-8">
+                  Shipping Address
+                </h2>
+                <div className="space-y-6 max-w-4xl">
+                  <div className="flex flex-col gap-2">
+                    <label className="text-[11px] font-bold uppercase">
+                      Address Line
+                    </label>
+                    <input
+                      name="addressLine"
+                      value={userData.addressLine}
+                      onChange={handleChange}
+                      type="text"
+                      className="w-full border border-[#E5E5E5] p-3 rounded-md outline-none"
+                    />
                   </div>
-
-                  {/* Product List Inside Order */}
-                  <div className="space-y-4 mb-8">
-                    {order.cartItems.map((item, index) => (
-                      <div
-                        key={index}
-                        className="flex justify-between text-sm text-gray-600"
-                      >
-                        <span>
-                          {item.name} x {item.qty}
-                        </span>
-                        <span className="font-medium">
-                          ${item.salePrice.toFixed(2)}
-                        </span>
-                      </div>
-                    ))}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="flex flex-col gap-2">
+                      <label className="text-[11px] font-bold uppercase">
+                        City
+                      </label>
+                      <input
+                        name="city"
+                        value={userData.city}
+                        onChange={handleChange}
+                        type="text"
+                        className="border border-[#E5E5E5] p-3 rounded-md outline-none"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <label className="text-[11px] font-bold uppercase">
+                        State
+                      </label>
+                      <input
+                        name="state"
+                        value={userData.state}
+                        onChange={handleChange}
+                        type="text"
+                        className="border border-[#E5E5E5] p-3 rounded-md outline-none"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <label className="text-[11px] font-bold uppercase">
+                        Postal Code
+                      </label>
+                      <input
+                        name="postalCode"
+                        value={userData.postalCode}
+                        onChange={handleChange}
+                        type="text"
+                        className="border border-[#E5E5E5] p-3 rounded-md outline-none"
+                      />
+                    </div>
                   </div>
                   <button
-                    onClick={() => navigate.push(`/order-details/${order._id}`)}
-                    className="w-full border border-gray-200 py-3 rounded-md text-[11px] font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-all"
+                    onClick={handleAddressUpdate}
+                    className="bg-black text-white px-8 py-3 rounded-md font-bold text-[10px] uppercase tracking-widest"
                   >
-                    View Order Details
+                    Update Address
                   </button>
-                  {/* <button className="w-full border border-gray-200 py-3 rounded-md text-[11px] font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-all">
+                </div>
+              </section>
+
+              <section>
+                <h2 className="text-xl font-bold text-[#1A1A1A] mb-8">
+                  Change Password
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl">
+                  <div className="flex flex-col gap-2">
+                    <label className="text-[11px] font-bold uppercase">
+                      Current Password
+                    </label>
+                    <input
+                      name="currentPassword"
+                      value={userData.currentPassword}
+                      onChange={handleChange}
+                      type="password"
+                      placeholder="••••••••"
+                      className="border border-[#E5E5E5] p-3 rounded-md outline-none"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="text-[11px] font-bold uppercase">
+                      New Password
+                    </label>
+                    <input
+                      name="newPassword"
+                      value={userData.newPassword}
+                      onChange={handleChange}
+                      type="password"
+                      placeholder="••••••••"
+                      className="border border-[#E5E5E5] p-3 rounded-md outline-none"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="text-[11px] font-bold uppercase">
+                      Confirm Password
+                    </label>
+                    <input
+                      name="confirmPassword"
+                      value={userData.confirmPassword}
+                      onChange={handleChange}
+                      type="password"
+                      placeholder="••••••••"
+                      className="border border-[#E5E5E5] p-3 rounded-md outline-none"
+                    />
+                  </div>
+                </div>
+                <button
+                  onClick={handlePasswordUpdate}
+                  className="mt-8 bg-black text-white px-8 py-3 rounded-md font-bold text-[10px] uppercase tracking-widest"
+                >
+                  Update Password
+                </button>
+              </section>
+            </div>
+          )}
+
+          {/* ORDER HISTORY TAB CONTENT (Design অনুযায়ী) */}
+          {activeTab === "orders" && (
+            <div className="space-y-6">
+              {orderLoading ? (
+                <LoadingPage />
+              ) : orders.length > 0 ? (
+                orders.map((order) => (
+                  <div
+                    key={order._id}
+                    className="border border-gray-100 rounded-lg p-8 bg-white shadow-sm"
+                  >
+                    <div className="flex justify-between items-start mb-6">
+                      <div>
+                        <h3 className="text-lg font-bold text-[#1A1A1A]">
+                          Order ORD-{order._id.slice(-5).toUpperCase()}
+                        </h3>
+                        <p className="text-sm text-gray-400 mt-1">
+                          {new Date(order.createdAt).toLocaleDateString(
+                            "en-US",
+                            {
+                              month: "long",
+                              day: "numeric",
+                              year: "numeric",
+                            },
+                          )}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <span
+                          className={`text-[11px] font-bold uppercase px-3 py-1 rounded-full ${order.status === "Delivered" ? "bg-green-50 text-green-600" : "bg-orange-50 text-orange-600"}`}
+                        >
+                          {order.status}
+                        </span>
+                        <p className="text-lg font-bold text-[#1A1A1A] mt-2">
+                          {order.totalAmount}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Product List Inside Order */}
+                    <div className="space-y-4 mb-8">
+                      {order.cartItems.map((item, index) => (
+                        <div
+                          key={index}
+                          className="flex justify-between text-sm text-gray-600"
+                        >
+                          <span>
+                            {item.name} x {item.qty}
+                          </span>
+                          <span className="font-medium">
+                            ${item.salePrice.toFixed(2)}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                    <button
+                      onClick={() =>
+                        navigate.push(`/order-details/${order._id}`)
+                      }
+                      className="w-full border border-gray-200 py-3 rounded-md text-[11px] font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-all"
+                    >
+                      View Order Details
+                    </button>
+                    {/* <button className="w-full border border-gray-200 py-3 rounded-md text-[11px] font-bold uppercase tracking-widest hover:bg-black hover:text-white transition-all">
                     View Order Details
                   </button> */}
-                </div>
-              ))
-            ) : (
-              <p className="text-center py-10 text-gray-400">
-                No orders found.
-              </p>
-            )}
-          </div>
-        )}
+                  </div>
+                ))
+              ) : (
+                <p className="text-center py-10 text-gray-400">
+                  No orders found.
+                </p>
+              )}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </ProtectedRoute>
   );
 };
 

@@ -12,6 +12,7 @@ import toast from "react-hot-toast";
 // import Handpicked from "../components/Handpicked";
 import LoadingPage from "@/components/shared/LoadingPage";
 import { useParams } from "next/navigation";
+import Handpicked from "@/components/Handpicked";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -287,7 +288,7 @@ const ProductDetails = () => {
         </div>
 
         {/* Hand picked for you  */}
-        {/* <Handpicked/> */}
+        <Handpicked/>
       </div>
     </div>
   );

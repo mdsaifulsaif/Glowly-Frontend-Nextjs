@@ -9,7 +9,7 @@ import { useParams, useRouter } from "next/navigation";
 
 const OrderDetails = () => {
   const { id } = useParams();
-  const router = useRouter(); // Variable name router রাখা স্ট্যান্ডার্ড
+  const router = useRouter(); 
   const [order, setOrder] = useState(null);
   const [activeSubTab, setActiveSubTab] = useState("summary");
   const [loading, setLoading] = useState(true);

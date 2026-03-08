@@ -13,13 +13,14 @@ import {
   IoCloseOutline,
   IoNotificationsOutline,
 } from "react-icons/io5";
-import { useAuth } from "@/contexts/authContext"; // আপনার ইমপোর্ট পাথ অনুযায়ী চেক করুন
+import { useAuth } from "@/contexts/authContext";
 import toast from "react-hot-toast";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 const DashboardLayout = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const pathname = usePathname(); // useLocation এর বদলে
-  const router = useRouter(); // useNavigate এর বদলে
+  const pathname = usePathname();
+  const router = useRouter();
   const { user, logoutUser } = useAuth();
 
   const menuItems = [
@@ -137,7 +138,7 @@ const DashboardLayout = ({ children }) => {
 
         {/* Dashboard Content Area */}
         <main className="p-4 md:p-8 w-full max-w-full overflow-x-hidden">
-          {children} {/* Outlet এর বদলে এখানে children হবে */}
+          <ProtectedRoute>{children}</ProtectedRoute>
         </main>
       </div>
 

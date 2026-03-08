@@ -1,10 +1,10 @@
-'use client'; // Context সবসময় ক্লায়েন্ট সাইডে চলে
-
+'use client'; 
+import Cookies from "js-cookie";
 import React, { createContext, useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { BASE_URL } from "@/helper/BASE_URL"; // @ এলিয়াস ব্যবহার করা হয়েছে
+import { BASE_URL } from "@/helper/BASE_URL"; 
 import toast from "react-hot-toast";
-import LoadingPage from "@/components/shared/LoadingPage"; // পাথ আপডেট করা হয়েছে
+import LoadingPage from "@/components/shared/LoadingPage"; 
 
 const AuthContext = createContext();
 
@@ -42,23 +42,43 @@ export const AuthProvider = ({ children }) => {
     setUser(userData);
   };
 
-  const logoutUser = async () => {
-    try {
-      const res = await axios.get(`${BASE_URL}/auth/logout`, {
-        withCredentials: true,
-      });
+//   const logoutUser = async () => {
+//     try {
+//       const res = await axios.get(`${BASE_URL}/auth/logout`, {
+//         withCredentials: true,
+//       });
 
-      if (res.data.success) {
-        toast.success(res.data.message || "Logged out successfully");
-      }
-    } catch (err) {
-      console.error("Logout failed", err);
-      toast.error("Logout failed. Please try again.");
-    } finally {
+//       if (res.data.success) {
+//         toast.success(res.data.message || "Logged out successfully");
+//       }
+//     } catch (err) {
+//       console.error("Logout failed", err);
+//       toast.error("Logout failed. Please try again.");
+//     } finally {
+//       setUser(null);
+//     }
+//   };
+const logoutUser = async () => {
+  try {
+    const res = await axios.get(`${BASE_URL}/auth/logout`, {
+      withCredentials: true,
+    });
+
+    if (res.data.success) {
+      // ১. কুকি থেকে টোকেনটি ডিলিট করুন (মিডলওয়্যারের জন্য এটি জরুরি)
+      Cookies.remove("token"); 
+      
+      toast.success(res.data.message || "Logged out successfully");
+      
+      // ২. ইউজারকে হোমপেজে পাঠিয়ে দিন এবং স্টেট ক্লিন করুন
       setUser(null);
+      window.location.href = "/"; // এটি ব্যবহার করলে ইউজার আর প্রটেক্টেড রাউটে থাকতে পারবে না
     }
-  };
-
+  } catch (err) {
+    console.error("Logout failed", err);
+    toast.error("Logout failed. Please try again.");
+  }
+};
   return (
     <AuthContext.Provider
       value={{
@@ -70,9 +90,7 @@ export const AuthProvider = ({ children }) => {
         logoutUser,
       }}
     >
-      {/* Next.js এ কন্ডিশনাল রেন্ডারিংয়ের সময় children-কে 
-          সরাসরি রাখা ভালো যাতে Hydration এ সমস্যা না হয়।
-      */}
+    
       {!loading ? (
         children
       ) : (

@@ -1,5 +1,5 @@
 import React from "react";
-import { useOrderStore } from "../../store/useOrderStore";
+import { useOrderStore } from "@/store/useOrderStore";
 import { IoCloseOutline } from "react-icons/io5";
 
 const OrderModal = ({ onStatusUpdate }) => {
