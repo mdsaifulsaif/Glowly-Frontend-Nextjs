@@ -42,52 +42,57 @@ export const AuthProvider = ({ children }) => {
     setUser(userData);
   };
 
-  //   const logoutUser = async () => {
-  //     try {
-  //       const res = await axios.get(`${BASE_URL}/auth/logout`, {
-  //         withCredentials: true,
-  //       });
+  // const logoutUser = async () => {
+  //   try {
+  //     const res = await axios.get(`${BASE_URL}/auth/logout`, {
+  //       withCredentials: true,
+  //     });
+  //     if (res.data.success) {
+  //       toast.success(res.data.message || "Logged out successfully");
 
-  //       if (res.data.success) {
-  //         toast.success(res.data.message || "Logged out successfully");
-  //       }
-  //     } catch (err) {
-  //       console.error("Logout failed", err);
-  //       toast.error("Logout failed. Please try again.");
-  //     } finally {
   //       setUser(null);
+
+  //       setTimeout(() => {
+  //         window.location.replace("/");
+  //       }, 500);
   //     }
-  //   };
+
+  //     // if (res.data.success) {
+  //     //   toast.success(res.data.message );
+
+  //     //   setUser(null);
+
+  //     //   window.location.replace("/");
+  //     // }
+  //   } catch (err) {
+  //     console.error("Logout failed", err);
+  //     toast.error("Logout failed. Please try again.");
+
+  //     setUser(null);
+  //     window.location.href = "/";
+  //   }
+  // };
+
   const logoutUser = async () => {
-    try {
-      const res = await axios.get(`${BASE_URL}/auth/logout`, {
-        withCredentials: true,
-      });
-      if (res.data.success) {
-        toast.success(res.data.message || "Logged out successfully");
-
-        setUser(null);
-
-        setTimeout(() => {
-          window.location.replace("/");
-        }, 500);
-      }
-
-      // if (res.data.success) {
-      //   toast.success(res.data.message );
-
-      //   setUser(null);
-
-      //   window.location.replace("/");
-      // }
-    } catch (err) {
-      console.error("Logout failed", err);
-      toast.error("Logout failed. Please try again.");
-
+  try {
+    const res = await axios.post(`${BASE_URL}/auth/logout`, {}, {
+      withCredentials: true,
+    });
+    
+    if (res.data.success) {
+      toast.success(res.data.message || "Logged out successfully");
       setUser(null);
-      window.location.href = "/";
+      setTimeout(() => {
+        window.location.replace("/");
+      }, 500);
     }
-  };
+  } catch (err) {
+    console.error("Logout failed", err);
+    // যদি রাউট খুঁজে না পায় (404), তাহলে হয়তো URL ভুল বা ব্যাকএন্ডে POST করা হয়নি
+    setUser(null);
+    window.location.href = "/";
+  }
+};
 
   return (
     <AuthContext.Provider
